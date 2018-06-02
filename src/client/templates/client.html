@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="https://getbootstrap.com/favicon.ico">
+
+    <title>클라이언트입니당.</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="/static/pricing.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+      <h4>모든 플레이어의 HP</h4>
+      {% for k, v in hps.items %}
+      {{k}} <button type="button" class="btn btn-outline-primary">{{v}}</button>
+      {% endfor %}
+    </div>
+
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+      당신의 이름 <button type="button" class="btn btn-outline-primary">{{name}}</button>
+      당신의 HP <button type="button" class="btn btn-outline-primary">{{hp}}</button>
+      당신이 고른 카드 <button type="button" class="btn btn-outline-primary">{{card}}</button>
+      당신이 고른 상대 <button type="button" class="btn btn-outline-primary">{{target}}</button>
+
+    </div>
+
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+      <h4>상대를 고르시오. 제발...</h4>
+      {% for t in targets  %}
+      <button type="button" class="btn btn-lg btn-block btn-primary" onclick="location.href='/client?name={{name}}&card=r&target={{t.key}}'">{{t.name}}</button>
+      {% endfor %}
+    </div>
+
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+      <h4>카드를 고르시오. 제발...</h4>
+      <h4>펜은 칼보다 강하다</h4>
+    </div>
+
+    <div class="container">
+      <div class="card-deck mb-3 text-center">
+        <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">방어</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>10 users included</li>
+              <li>2 GB of storage</li>
+              <li>Email support</li>
+              <li>Help center access</li>
+            </ul>
+            <button type="button" class="btn btn-lg btn-block btn-primary" onclick="location.href='/client?name={{name}}&card=r&target={{target_key}}'">선택</button>
+          </div>
+        </div>
+        <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">칼</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">$15 <small class="text-muted">/ mo</small></h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>20 users included</li>
+              <li>10 GB of storage</li>
+              <li>Priority email support</li>
+              <li>Help center access</li>
+            </ul>
+            <button type="button" class="btn btn-lg btn-block btn-primary" onclick="location.href='/client?name={{name}}&card=g&target={{target_key}}'">선택</button>
+          </div>
+        </div>
+        <div class="card mb-4 box-shadow">
+          <div class="card-header">
+            <h4 class="my-0 font-weight-normal">펜</h4>
+          </div>
+          <div class="card-body">
+            <h1 class="card-title pricing-card-title">$29 <small class="text-muted">/ mo</small></h1>
+            <ul class="list-unstyled mt-3 mb-4">
+              <li>30 users included</li>
+              <li>15 GB of storage</li>
+              <li>Phone and email support</li>
+              <li>Help center access</li>
+            </ul>
+            <button type="button" class="btn btn-lg btn-block btn-primary" onclick="location.href='/client?name={{name}}&card=b&target={{target_key}}'">선택</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+
