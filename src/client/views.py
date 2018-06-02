@@ -103,8 +103,6 @@ def on_tick():
                 demage(me, you)
         else:
             demage(me, you)
-    Cards = {}
-    Targets = {}
 
 
 class AdminView(View):
