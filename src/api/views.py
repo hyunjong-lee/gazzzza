@@ -13,32 +13,36 @@ game = GameStatus()
 class HeaderParser:
     @staticmethod
     def get_header(request, field):
-        value = request.META.get(field)
+        value = request.META.get('HTTP_' + field)
         return value
-
-    @staticmethod
-    def register(request):
-        nick = get_header(request, 'Nickname')
-        guid = uuid.uuid4()
 
 
 class RegisterView(View):
     def get(self, request):
-        nick, guid = HeaderParser.register(request)
-        header = {'Guid': guid}
-        response = game.register(guid, nick)
+        nick = HeaderParser.get_header(request, 'NICKNAME')
+        print(nick)
+        guid = str(uuid.uuid4())
+        ret = game.register(guid, nick)
 
-        return JsonResponse(response, header=header)
+        response = JsonResponse(ret)
+        response['Guid'] = guid
+        return response
 
 
 class PingView(View):
     def get(self, request):
-        return JsonResponse({})
+        guid = HeaderParser.get_header(request, 'GUID')
+        ret = game.ping(guid)
+        return JsonResponse(ret)
 
 
 class ActView(View):
     def get(self, request):
-        return JsonResponse({})
+        guid = HeaderParser.get_header(request, 'GUID')
+        target_guid = HeaderParser.get_header(request, 'TARGETGUID')
+        action = HeaderParser.get_header(request, 'ACTION')
+        ret = game.act(guid, target_guid, action)
+        return JsonResponse(ret)
 
 
 class NickView(View):
