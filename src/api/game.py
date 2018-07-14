@@ -1,3 +1,4 @@
+from copy import deepcopy
 import datetime
 
 
@@ -8,14 +9,77 @@ class GameStatus:
         self.actions = {}
         self.base_tick = datetime.datetime.now()
         self.turn = 1
+        self.mp_map = {'1': 40, '2': 10, '3': 5}
+        self.demage_map = {'2': 10, '3': 5}
 
     def get_remain_time(self):
         diff = self.base_tick - datetime.datetime.now()
-        rem_time = diff.total_seconds() + 20
+        rem_time = diff.total_seconds() + 5
         return rem_time
 
     def do_action(self):
-        pass
+        execute = {}
+        actions = deepcopy(self.actions)
+        for k in actions:
+            act = actions.get(k, {})
+            action = act.get('action')
+            target = act.get('target_guid')
+            if not action:
+                continue
+
+            # user check
+            if k not in self.users:
+                continue
+
+            # action check
+            if not action:
+                continue
+
+            # MP check
+            status = self.users[k]
+            req_mp = self.mp_map[action]
+            if status['mp'] < req_mp:
+                continue
+
+            # target check
+            if action in ['2', '3']:
+                if not target:
+                    continue
+                if target not in self.users:
+                    continue
+
+            execute[k] = {
+                'mp': self.mp_map[action],
+                'action': action,
+                'target': target,
+            }
+
+        print(execute)
+
+        for k in execute:
+            a = execute[k]['action']
+            t = execute[k]['target']
+            if a in ['1']:
+                continue
+
+            if a not in ['2', '3']:
+                continue
+
+            if a in ['2', '3']:
+                if t in execute and execute[t]['action'] == '1':
+                    continue
+                if a == '2' and t in execute:
+                    if execute[t]['action'] == '3':
+                        continue
+
+                self.users[t]['hp'] -= self.demage_map[a]
+
+        for k in execute:
+            a = execute[k]['action']
+            self.users[k]['mp'] -= execute[k]['mp']
+
+        for k in self.users:
+            self.users[k]['mp'] += 3
 
     def on_tick(self):
         self.do_action()
@@ -39,6 +103,7 @@ class GameStatus:
 
     def get_my_act(self, guid):
         ret = {}
+        ret['guid'] = guid
         act = self.actions.get(guid, {})
         if 'action' in act:
             ret['selected-act'] = act['action']
@@ -80,7 +145,7 @@ class GameStatus:
         if target_guid:
             my_act['target_guid'] = target_guid
         if action:
-            my_act['action'] = action
+            my_act['action'] = str(action)
         self.actions[guid] = my_act
 
         return self.get_game(guid)
