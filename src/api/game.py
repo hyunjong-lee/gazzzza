@@ -9,10 +9,23 @@ class GameStatus:
         self.base_tick = datetime.datetime.now()
         self.turn = 1
 
-    def on_tick(self):
+    def get_remain_time(self):
+        diff = self.base_tick - datetime.datetime.now()
+        rem_time = diff.total_seconds() + 20
+        return rem_time
+
+    def do_action(self):
         pass
 
+    def on_tick(self):
+        self.do_action()
+        self.turn += 1
+        self.base_tick = datetime.datetime.now()
+
     def check_tick(self):
+        rem_time = self.get_remain_time()
+        if rem_time <= 0:
+            return True
         return False
 
     def wrap_user(self, guid, idx):
@@ -39,7 +52,7 @@ class GameStatus:
 
         ret = {
             'turn': self.turn,
-            'turn-remain-time': 1.2,
+            'turn-remain-time': self.get_remain_time(),
         }
         ret.update(self.get_my_act(my_guid))
 
