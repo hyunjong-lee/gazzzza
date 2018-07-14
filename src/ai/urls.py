@@ -17,10 +17,15 @@ from django.contrib import admin
 from django.urls import path
 
 from client.views import *
+from api.views import *
 
 
 urlpatterns = [
     path('admin/', AdminView.as_view()),
     path('enter/', EnterView.as_view()),
     path('client/', ClientView.as_view()),
+    path('register', RegisterView.as_view()),
+    path('ping', PingView.as_view()),
+    path('act', ActView.as_view()),
+    path('nick', NickView.as_view()),
 ]
