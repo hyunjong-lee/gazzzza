@@ -73,6 +73,10 @@ class GameStatus:
                         continue
 
                 self.users[t]['hp'] -= self.demage_map[a]
+                if self.users[t]['hp'] < 0:
+                    self.users[t]['death'] += 1
+                    self.users[t]['hp'] = 100
+                    self.users[t]['mp'] = 100
 
         for k in execute:
             a = execute[k]['action']
@@ -80,6 +84,9 @@ class GameStatus:
 
         for k in self.users:
             self.users[k]['mp'] += 3
+            if self.users[k]['mp'] > 100:
+                self.users[k]['mp'] = 100
+
 
     def on_tick(self):
         self.do_action()
@@ -98,7 +105,8 @@ class GameStatus:
         ret['user%d-guid' % idx] = guid
         ret['user%d-hp' % idx] = val['hp']
         ret['user%d-mp' % idx] = val['mp']
-        ret['user%d-nickname' % idx] = val['nick']
+        ret['user%d-death' % idx] = val['death']
+        ret['user%d-nickname' % idx] = '%s' % val['nick']
         return ret
 
     def get_my_act(self, guid):
@@ -133,6 +141,7 @@ class GameStatus:
         if guid not in self.users:
             user['hp'] = 100
             user['mp'] = 100
+            user['death'] = 0
         self.users[guid] = user
 
         return self.get_game(guid)
